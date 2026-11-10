@@ -9,10 +9,12 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { AuthProvider } from './context/AuthContext';
 import { AuthModal } from './components/auth/AuthModal';
-import { AgriSmartLogo } from './components/AgriSmartLogo';
+import { AgriNexaLogo } from './components/AgriNexaLogo';
 import { DiagnosisProvider, useDiagnosis } from './context/DiagnosisContext';
 import { DiagnosisChatAssistant } from './components/chat/DiagnosisChatAssistant';
 import { WeatherIntelligenceCard } from './components/weather/WeatherIntelligenceCard';
+import { IrrigationPage } from './pages/IrrigationPage';
+import { SatelliteMonitoringPage } from './pages/SatelliteMonitoringPage';
 
 function GlobalModals({ onNavigateDiagnose }: { onNavigateDiagnose: () => void }) {
   const { 
@@ -69,7 +71,7 @@ function GlobalModals({ onNavigateDiagnose }: { onNavigateDiagnose: () => void }
   );
 }
 
-export type AppView = 'landing' | 'diagnose' | 'crop-recommendation' | 'sustainability' | 'weather-intelligence' | 'login' | 'signup';
+export type AppView = 'landing' | 'diagnose' | 'crop-recommendation' | 'sustainability' | 'weather-intelligence' | 'irrigation' | 'satellite' | 'login' | 'signup';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -91,7 +93,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('AgriSmart AI UI Error caught by boundary:', error, errorInfo);
+    console.error('AgriNexa AI UI Error caught by boundary:', error, errorInfo);
   }
 
   render() {
@@ -128,7 +130,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 function Footer() {
   return (
     <footer
-      className="border-t border-[#E5E0D0] bg-[#FAF7EE] py-8"
+      className="border-t border-[#EFE9D7] bg-white py-8"
       role="contentinfo"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -138,13 +140,13 @@ function Footer() {
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3.5">
             <div className="flex items-center gap-2">
               <div
-                className="flex h-7 w-7 max-h-7 max-w-7 items-center justify-center rounded-lg bg-[#E8F3EC] p-0.5 shrink-0 overflow-hidden"
+                className="flex h-7 w-7 max-h-7 max-w-7 items-center justify-center rounded-full bg-[#FEF7E1] p-0.5 shrink-0 overflow-hidden"
                 aria-hidden="true"
               >
-                <AgriSmartLogo variant="footer" size={24} />
+                <AgriNexaLogo variant="footer" size={24} />
               </div>
-              <span className="text-sm font-bold text-[#163824]">
-                AgriSmart <span className="font-serif italic font-normal text-[#2D6A4F]">AI</span>
+              <span className="text-sm font-medium text-[#35322D]">
+                AgriNexa <span className="text-[#6CBE03]">AI</span>
               </span>
             </div>
             <span className="hidden sm:inline-block h-3.5 w-px bg-slate-300" aria-hidden="true" />
@@ -172,6 +174,8 @@ export function AppShell({ initialView }: AppShellProps = {}) {
         return 'diagnose';
       }
       if (hash === '#weather-intelligence') return 'weather-intelligence';
+      if (hash === '#irrigation') return 'irrigation';
+      if (hash === '#satellite') return 'satellite';
       if (hash === '#crop-recommendation') return 'crop-recommendation';
       if (hash === '#sustainability') return 'sustainability';
     }
@@ -193,6 +197,10 @@ export function AppShell({ initialView }: AppShellProps = {}) {
           setActiveView('diagnose');
         } else if (hash === '#weather-intelligence') {
           setActiveView('weather-intelligence');
+        } else if (hash === '#irrigation') {
+          setActiveView('irrigation');
+        } else if (hash === '#satellite') {
+          setActiveView('satellite');
         } else if (hash === '#crop-recommendation') {
           setActiveView('crop-recommendation');
         } else if (hash === '#sustainability') {
@@ -214,7 +222,7 @@ export function AppShell({ initialView }: AppShellProps = {}) {
     setActiveView(view);
 
     if (typeof window !== 'undefined') {
-      const newHash = targetHash || (view === 'diagnose' ? '#diagnose' : view === 'crop-recommendation' ? '#crop-recommendation' : view === 'sustainability' ? '#sustainability' : view === 'weather-intelligence' ? '#weather-intelligence' : '');
+      const newHash = targetHash || (view === 'diagnose' ? '#diagnose' : view === 'crop-recommendation' ? '#crop-recommendation' : view === 'sustainability' ? '#sustainability' : view === 'weather-intelligence' ? '#weather-intelligence' : view === 'irrigation' ? '#irrigation' : view === 'satellite' ? '#satellite' : '');
       window.history.pushState({ view }, '', newHash ? `${window.location.pathname}${newHash}` : window.location.pathname);
     }
 
@@ -231,6 +239,8 @@ export function AppShell({ initialView }: AppShellProps = {}) {
   const handleNavigateLanding = () => navigateTo('landing');
   const handleNavigateDiagnose = (hash?: string) => navigateTo('diagnose', hash);
   const handleOpenWeatherIntelligence = () => navigateTo('weather-intelligence');
+  const handleOpenIrrigation = () => navigateTo('irrigation');
+  const handleOpenSatellite = () => navigateTo('satellite');
   const handleOpenCropRecommendation = () => navigateTo('crop-recommendation');
   const handleOpenSustainability = () => navigateTo('sustainability');
   const handleNavigateLogin = () => navigateTo('login');
@@ -242,7 +252,7 @@ export function AppShell({ initialView }: AppShellProps = {}) {
   };
 
   return (
-    <div id="app-shell" className="flex min-h-screen flex-col bg-[#FAF7EE]">
+    <div id="app-shell" className="flex min-h-screen flex-col bg-white">
       {activeView !== 'landing' && (
         <Header
           activeView={activeView === 'diagnose' ? 'home' : activeView}
@@ -251,6 +261,8 @@ export function AppShell({ initialView }: AppShellProps = {}) {
           onNavigateCropRecommendation={handleOpenCropRecommendation}
           onNavigateSustainability={handleOpenSustainability}
           onNavigateWeatherIntelligence={handleOpenWeatherIntelligence}
+          onNavigateIrrigation={handleOpenIrrigation}
+          onNavigateSatellite={handleOpenSatellite}
           onNavigateModelInfo={() => navigateTo('diagnose', '#model-info')}
           onNavigateHowItWorks={() => navigateTo('diagnose', '#how-it-works')}
           onNavigateLogin={handleNavigateLogin}
@@ -286,6 +298,8 @@ export function AppShell({ initialView }: AppShellProps = {}) {
               onNavigateCropRecommendation={handleOpenCropRecommendation}
               onNavigateSustainability={handleOpenSustainability}
               onNavigateWeatherIntelligence={handleOpenWeatherIntelligence}
+              onNavigateIrrigation={handleOpenIrrigation}
+              onNavigateSatellite={handleOpenSatellite}
               onNavigateModelInfo={() => navigateTo('diagnose', '#model-info')}
               onNavigateHowItWorks={() => navigateTo('diagnose', '#how-it-works')}
               className="hidden md:flex"
@@ -297,6 +311,9 @@ export function AppShell({ initialView }: AppShellProps = {}) {
                 <DiagnosePage
                   onOpenCropRecommendation={handleOpenCropRecommendation}
                   onOpenSustainabilityScore={handleOpenSustainability}
+                  onOpenWeatherIntelligence={handleOpenWeatherIntelligence}
+                  onOpenIrrigation={handleOpenIrrigation}
+                  onOpenSatellite={handleOpenSatellite}
                 />
               )}
 
@@ -323,6 +340,17 @@ export function AppShell({ initialView }: AppShellProps = {}) {
                     />
                   </div>
                 </div>
+              )}
+
+              {activeView === 'irrigation' && (
+                <IrrigationPage onSignIn={handleNavigateLogin} />
+              )}
+
+              {activeView === 'satellite' && (
+                <SatelliteMonitoringPage
+                  onSignIn={handleNavigateLogin}
+                  onOpenIrrigation={handleOpenIrrigation}
+                />
               )}
             </div>
           </div>

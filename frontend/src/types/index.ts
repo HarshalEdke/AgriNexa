@@ -15,7 +15,7 @@ export interface PredictionResponse {
   fallback_used?: boolean;
 }
 
-export type ChatLanguage = 'en' | 'hi' | 'gu';
+export type ChatLanguage = 'en' | 'hi' | 'gu' | 'mr' | 'ta' | 'pa';
 
 export interface ChatRequest {
   predicted_class: string;
@@ -185,4 +185,4 @@ export interface WeatherIntelligenceResponse {
 
 export * from './auth';
 export * from './sustainability';
-
+export * from './irrigation';

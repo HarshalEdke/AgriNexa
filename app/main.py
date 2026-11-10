@@ -9,6 +9,8 @@ from app.api.routes.chat import router as chat_router
 from app.api.routes.weather import router as weather_router
 from app.api.routes.auth import router as auth_router
 from app.api.routes.sustainability import router as sustainability_router
+from app.api.routes.irrigation import router as irrigation_router
+from app.api.routes.satellite import router as satellite_router
 from app.core.database import close_db_engine
 from app.core.errors import AppError, app_error_handler
 from model.inference.torch_config import configure_inference_backends
@@ -24,7 +26,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="AgriSmart AI - Intelligent Crop Disease Classification API for Smart India Hackathon 2026",
+    description="AgriNexa AI - Intelligent Crop Disease Classification API for Smart India Hackathon 2026",
     lifespan=lifespan,
 )
 
@@ -57,3 +59,5 @@ app.include_router(weather_router)
 
 app.include_router(auth_router)
 app.include_router(sustainability_router)
+app.include_router(irrigation_router)
+app.include_router(satellite_router)

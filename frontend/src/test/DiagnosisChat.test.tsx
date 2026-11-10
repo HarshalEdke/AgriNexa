@@ -127,7 +127,7 @@ describe('DiagnosisChatAssistant Component', () => {
     expect(screen.getByPlaceholderText(/ask about symptoms, treatments, or prevention/i)).toBeInTheDocument();
   });
 
-  it('switches language between English, Hindi, and Gujarati', () => {
+  it('switches language between the supported Indian languages', () => {
     render(
       <DiagnosisChatAssistant
         isOpen={true}
@@ -146,6 +146,19 @@ describe('DiagnosisChatAssistant Component', () => {
     fireEvent.click(gujaratiBtn);
 
     expect(screen.getByText(/નમસ્તે! હું તમારો કૃષિ AI સહાયક છું/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /switch language to marathi/i }));
+    expect(screen.getByText(/नमस्कार! मी तुमचा कृषी AI सहाय्यक आहे/i)).toBeInTheDocument();
+    expect(screen.getByText(/उपचार आणि औषधे/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/या रोगाबद्दल प्रश्न विचारा/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /switch language to tamil/i }));
+    expect(screen.getByText(/வணக்கம்! நான் உங்கள் வேளாண்மை AI உதவியாளர்/i)).toBeInTheDocument();
+    expect(screen.getByText(/சிகிச்சை மற்றும் மருந்து/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /switch language to punjabi/i }));
+    expect(screen.getByText(/ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡਾ ਖੇਤੀਬਾੜੀ AI ਸਹਾਇਕ ਹਾਂ/i)).toBeInTheDocument();
+    expect(screen.getByText(/ਇਲਾਜ ਅਤੇ ਦਵਾਈ/i)).toBeInTheDocument();
   });
 
   it('successfully sends question and displays AI answer', async () => {
@@ -195,6 +208,39 @@ describe('DiagnosisChatAssistant Component', () => {
     // Assistant answer is displayed
     await waitFor(() => {
       expect(screen.getByText('Apply chlorothalonil or copper spray every 7-10 days.')).toBeInTheDocument();
+    });
+  });
+
+  it('sends the selected chatbot language to the API', async () => {
+    vi.mocked(client.sendChatMessage).mockResolvedValueOnce({
+      answer: 'உங்கள் பயிரை தொடர்ந்து கண்காணிக்கவும்.',
+      session_id: '11111111-2222-3333-4444-555555555555',
+      grounded: true,
+      source: 'gemini',
+      timestamp: new Date().toISOString(),
+    });
+
+    render(
+      <DiagnosisChatAssistant
+        isOpen={true}
+        onClose={vi.fn()}
+        result={testResult}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /switch language to tamil/i }));
+    fireEvent.change(screen.getByPlaceholderText(/இந்த நோயைப் பற்றி கேளுங்கள்/i), {
+      target: { value: 'இந்த நோய்க்கு என்ன சிகிச்சை?' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /send message to agro ai/i }));
+
+    await waitFor(() => {
+      expect(client.sendChatMessage).toHaveBeenCalledWith(
+        expect.objectContaining({
+          question: 'இந்த நோய்க்கு என்ன சிகிச்சை?',
+          language: 'ta',
+        })
+      );
     });
   });
 

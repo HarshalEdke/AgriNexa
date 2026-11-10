@@ -1,10 +1,10 @@
 {
-  "model_name": "AgriSmart AI Crop Recommendation Model v2 (Farmer-Friendly Multi-Source)",
+  "model_name": "AgriNexa AI Crop Recommendation Model v2 (Farmer-Friendly Multi-Source)",
   "model_type": "RandomForestClassifier",
   "model_version": "v2.0.0",
   "algorithm": "sklearn.pipeline.Pipeline(RandomForestClassifier)",
   "dataset": {
-    "name": "AgriSmart Empirical Multi-Source Indian Agricultural Dataset v2",
+    "name": "AgriNexa Empirical Multi-Source Indian Agricultural Dataset v2",
     "sources": [
       "Directorate of Economics and Statistics (DES), Ministry of Agriculture & Farmers Welfare, India",
       "ICRISAT Meso-Level District Agricultural Database (VDSA)",

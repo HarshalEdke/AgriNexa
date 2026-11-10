@@ -30,7 +30,7 @@ from model.crop_recommendation_v2.preprocessing import (
 )
 
 DATASET_METADATA = {
-    "name": "AgriSmart Empirical Multi-Source Indian Agricultural Dataset v2",
+    "name": "AgriNexa Empirical Multi-Source Indian Agricultural Dataset v2",
     "sources": [
         "Directorate of Economics and Statistics (DES), Ministry of Agriculture & Farmers Welfare, India",
         "ICRISAT Meso-Level District Agricultural Database (VDSA)",
@@ -295,7 +295,7 @@ def train_and_evaluate(
     }
     
     metadata = {
-        "model_name": "AgriSmart AI Crop Recommendation Model v2 (Farmer-Friendly Multi-Source)",
+        "model_name": "AgriNexa AI Crop Recommendation Model v2 (Farmer-Friendly Multi-Source)",
         "model_type": classifier_step.__class__.__name__,
         "model_version": "v2.0.0",
         "algorithm": f"sklearn.pipeline.Pipeline({classifier_step.__class__.__name__})",
@@ -337,7 +337,7 @@ def train_and_evaluate(
     return metrics_summary
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Train AgriSmart AI Crop Recommendation Model v2")
+    parser = argparse.ArgumentParser(description="Train AgriNexa AI Crop Recommendation Model v2")
     parser.add_argument("--data-path", type=str, default="model/crop_recommendation_v2/data/empirical_crop_dataset_v2.csv")
     parser.add_argument("--output-dir", type=str, default="model/crop_recommendation_v2")
     parser.add_argument("--no-tuning", action="store_true")

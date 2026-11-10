@@ -1,4 +1,4 @@
-"""Inference interface for AgriSmart AI Crop Recommendation Model v2 (Farmer-Friendly)."""
+"""Inference interface for AgriNexa AI Crop Recommendation Model v2 (Farmer-Friendly)."""
 
 import json
 from pathlib import Path

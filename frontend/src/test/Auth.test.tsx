@@ -49,7 +49,7 @@ describe('Optional Authentication Foundation — Phase 1', () => {
     // Primary action: Sign Up
     const signUpButton = screen.getByRole('button', { name: /^sign up$/i });
     expect(signUpButton).toBeInTheDocument();
-    expect(signUpButton).toHaveClass('bg-emerald-600');
+    expect(signUpButton).toHaveClass('bg-[#FFB700]');
 
     // Secondary action: Login
     const loginButton = screen.getByRole('button', { name: /^login$/i });
@@ -91,7 +91,7 @@ describe('Optional Authentication Foundation — Phase 1', () => {
     fireEvent.click(loginButton);
 
     // Dedicated Login view rendered
-    expect(screen.getByRole('heading', { name: /sign in to agrismart ai/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /sign in to agrinexa ai/i, level: 1 })).toBeInTheDocument();
     expect(screen.getByLabelText(/email address/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
 
@@ -114,13 +114,13 @@ describe('Optional Authentication Foundation — Phase 1', () => {
     fireEvent.click(signUpButton);
 
     // Dedicated Sign Up view rendered
-    expect(screen.getByRole('heading', { name: /create an agrismart ai account/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /create an agrinexa ai account/i, level: 1 })).toBeInTheDocument();
 
     // Switch to Sign In from link
     const signInSwitch = screen.getByRole('button', { name: /^sign in$/i });
     fireEvent.click(signInSwitch);
 
-    expect(screen.getByRole('heading', { name: /sign in to agrismart ai/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /sign in to agrinexa ai/i, level: 1 })).toBeInTheDocument();
   });
 
   it('preserves and returns to previous relevant page (crop recommendation) after skipping auth', () => {
@@ -134,7 +134,7 @@ describe('Optional Authentication Foundation — Phase 1', () => {
     // Navigate to Login
     const loginButton = screen.getByRole('button', { name: /^login$/i });
     fireEvent.click(loginButton);
-    expect(screen.getByRole('heading', { name: /sign in to agrismart ai/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /sign in to agrinexa ai/i, level: 1 })).toBeInTheDocument();
 
     // Return to Previous Page
     const returnBtn = screen.getByRole('button', { name: /return to previous page/i });
@@ -149,7 +149,7 @@ describe('Optional Authentication Foundation — Phase 1', () => {
     render(<AuthModal isOpen={true} onClose={onClose} />);
 
     // Default mode is Sign In
-    expect(screen.getByText(/sign in to agrismart ai/i)).toBeInTheDocument();
+    expect(screen.getByText(/sign in to agrinexa ai/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit sign in/i })).toBeInTheDocument();
 
     // Switch to Sign Up
@@ -231,12 +231,12 @@ describe('Optional Authentication Foundation — Phase 1', () => {
     // 2. Click Sign Up in top-right Header
     const signUpBtn = screen.getByRole('button', { name: /^sign up$/i });
     fireEvent.click(signUpBtn);
-    expect(screen.getByRole('heading', { name: /create an agrismart ai account/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /create an agrinexa ai account/i, level: 1 })).toBeInTheDocument();
 
     // 3. Switch to Sign In from link
     const signInSwitch = screen.getByRole('button', { name: /^sign in$/i });
     fireEvent.click(signInSwitch);
-    expect(screen.getByRole('heading', { name: /sign in to agrismart ai/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /sign in to agrinexa ai/i, level: 1 })).toBeInTheDocument();
 
     // 4. Click "Return to Previous Page"
     const returnBtn = screen.getByRole('button', { name: /return to previous page/i });
@@ -251,4 +251,3 @@ describe('Optional Authentication Foundation — Phase 1', () => {
     expect(screen.getByRole('heading', { name: /plant disease diagnosis/i, level: 1 })).toBeInTheDocument();
   });
 });
-

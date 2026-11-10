@@ -180,12 +180,18 @@ interface DiagnosePageProps {
   initialResult?: PredictionResponse | null;
   onOpenCropRecommendation?: () => void;
   onOpenSustainabilityScore?: () => void;
+  onOpenWeatherIntelligence?: () => void;
+  onOpenIrrigation?: () => void;
+  onOpenSatellite?: () => void;
 }
 
 export function DiagnosePage({
   initialResult = null,
   onOpenCropRecommendation,
   onOpenSustainabilityScore,
+  onOpenWeatherIntelligence,
+  onOpenIrrigation,
+  onOpenSatellite,
 }: DiagnosePageProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -375,14 +381,14 @@ export function DiagnosePage({
           }`}
         >
           {/* Section Header (avoiding duplicate huge branding name) */}
-          <div className="mb-6 text-center">
+          <div className="mb-6 w-full text-center">
             <h1
-              aria-label="AgriSmart AI — Plant Disease Diagnosis"
-              className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#163824] mb-2 leading-tight"
+              aria-label="AgriNexa AI — Plant Disease Diagnosis"
+              className="mb-2 w-full text-2xl font-extrabold leading-tight tracking-tight text-[#163824] sm:text-3xl lg:text-4xl"
             >
               Plant Disease Diagnosis
             </h1>
-            <p className="text-center text-sm sm:text-base text-slate-600 font-normal leading-relaxed max-w-lg mx-auto">
+            <p className="mx-auto block w-full max-w-2xl text-center text-sm font-normal leading-relaxed text-slate-600 sm:text-base">
               Upload a crop or leaf image to detect disease and get AI-powered insights.
             </p>
           </div>
@@ -760,6 +766,9 @@ export function DiagnosePage({
       <BonusFeaturesSection
         onSelectCropRecommendation={onOpenCropRecommendation}
         onSelectSustainabilityScore={onOpenSustainabilityScore}
+        onSelectWeatherIntelligence={onOpenWeatherIntelligence}
+        onSelectIrrigation={onOpenIrrigation}
+        onSelectSatellite={onOpenSatellite}
       />
 
 

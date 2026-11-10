@@ -7,7 +7,7 @@ interface LandingHeroProps {
 export function LandingHero({ onGetStarted }: LandingHeroProps) {
   return (
     <section
-      aria-label="AgriSmart AI Introduction"
+      aria-label="AgriNexa AI Introduction"
       className="relative overflow-hidden bg-[#FAF7EE] pt-8 pb-12 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-20"
     >
       {/* Background Soft Glow Accents */}
@@ -41,7 +41,7 @@ export function LandingHero({ onGetStarted }: LandingHeroProps) {
 
             {/* Description Copy */}
             <p className="mx-auto max-w-lg text-base sm:text-lg text-slate-600 leading-relaxed lg:mx-0 font-normal">
-              AgriSmart AI empowers farmers with intelligent insights, helping them make better decisions, improve crop health, and build a more sustainable future.
+              AgriNexa AI empowers farmers with intelligent insights, helping them make better decisions, improve crop health, and build a more sustainable future.
             </p>
 
             {/* Get Started Action Button */}
@@ -50,7 +50,7 @@ export function LandingHero({ onGetStarted }: LandingHeroProps) {
                 type="button"
                 onClick={onGetStarted}
                 className="group inline-flex items-center gap-3 rounded-full bg-[#234E37] px-8 py-3.5 text-base font-bold text-white shadow-md transition-all duration-200 hover:bg-[#1A3C2A] hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"
-                aria-label="Get Started with AgriSmart AI"
+                aria-label="Get Started with AgriNexa AI"
               >
                 <span>Get Started</span>
                 <ArrowRight

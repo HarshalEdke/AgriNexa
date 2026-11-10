@@ -186,7 +186,7 @@ async def process_prediction(
                     confidence=val_res.confidence,
                     model_version=val_res.model_version,
                     display_name="Unsupported Crop Species",
-                    precaution="AgriSmart AI currently supports Apple, Corn, Potato, and Tomato foliage. This leaf appears to belong to an unsupported plant variety.",
+                    precaution="AgriNexa AI currently supports Apple, Corn, Potato, and Tomato foliage. This leaf appears to belong to an unsupported plant variety.",
                     probabilities=val_res.probabilities,
                     pipeline="E12-SigLIP-Validity-Gate",
                     leaf_detected=True,

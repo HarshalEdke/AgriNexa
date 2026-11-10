@@ -1,7 +1,7 @@
 """Weather Intelligence Service module.
 
 Responsible exclusively for fetching weather metrics from Open-Meteo,
-normalizing them into standard AgriSmart weather schemas, and generating
+normalizing them into standard AgriNexa weather schemas, and generating
 deterministic agronomic farm advisories.
 """
 

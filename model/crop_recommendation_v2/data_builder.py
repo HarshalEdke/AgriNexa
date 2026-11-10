@@ -1,4 +1,4 @@
-"""Empirical Multi-Source Dataset Builder for AgriSmart AI Crop Recommendation Model v2.
+"""Empirical Multi-Source Dataset Builder for AgriNexa AI Crop Recommendation Model v2.
 
 This module integrates empirical Indian agricultural data across four dimensions:
 1. Historical District-Level Crop Cultivation & Temporal Preceding Crop Sequences (DES India / ICRISAT VDSA).

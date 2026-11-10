@@ -1,42 +1,42 @@
 @import "tailwindcss";
 
 /* ============================================================
-   AgriSmart AI — Design System
+   AgriNexa AI — Design System
    Brand palette + global tokens (Reference Design Alignment)
    ============================================================ */
 
 @theme {
   /* Brand colours */
-  --color-primary:       #10B981;
-  --color-primary-dark:  #059669;
-  --color-primary-light: #D1FAE5;
-  --color-primary-subtle: #ECFDF5;
+  --color-primary:       #6CBE03;
+  --color-primary-dark:  #4C8A1F;
+  --color-primary-light: #EAF6DA;
+  --color-primary-subtle: #FEF7E1;
   
-  --color-dark:          #0F172A;
-  --color-dark-muted:    #475569;
-  --color-dark-subtle:   #94A3B8;
+  --color-dark:          #35322D;
+  --color-dark-muted:    #46423B;
+  --color-dark-subtle:   #777168;
 
-  --color-amber:         #F59E0B;
-  --color-amber-dark:    #D97706;
-  --color-amber-light:   #FEF3C7;
+  --color-amber:         #FFB700;
+  --color-amber-dark:    #D99B00;
+  --color-amber-light:   #FEF7E1;
 
-  --color-bg:            #FAF7EE;
+  --color-bg:            #FFFFFF;
   --color-card-bg:       #FFFFFF;
 
-  /* Neutral scale (slate) */
-  --color-slate-50:  #FAF7EE;
-  --color-slate-100: #F3EFE3;
-  --color-slate-200: #E5E0D0;
-  --color-slate-300: #CBD5E1;
-  --color-slate-400: #94A3B8;
-  --color-slate-500: #64748B;
-  --color-slate-600: #475569;
-  --color-slate-700: #334155;
-  --color-slate-800: #1E293B;
-  --color-slate-900: #0F172A;
+  /* Warm neutral scale */
+  --color-slate-50:  #FFFFFF;
+  --color-slate-100: #FEF7E1;
+  --color-slate-200: #EFE9D7;
+  --color-slate-300: #D8D1BF;
+  --color-slate-400: #A49D90;
+  --color-slate-500: #777168;
+  --color-slate-600: #625E56;
+  --color-slate-700: #46423B;
+  --color-slate-800: #35322D;
+  --color-slate-900: #24221F;
 
   /* Typography */
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Outfit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* Spacing */
   --spacing-section: 4rem;
@@ -66,17 +66,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Background atmospheric gradient matching reference warm ivory tone */
+/* Background treatment for the farm insight screens */
 .bg-mesh-agri {
-  background-color: #FAF7EE;
+  background-color: #FFFFFF;
   background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 65%),
-    radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+    radial-gradient(ellipse at 50% 0%, rgba(108, 190, 3, 0.045) 0%, transparent 65%),
+    radial-gradient(circle at 100% 100%, rgba(255, 183, 0, 0.035) 0%, transparent 50%);
 }
 
 /* ============================================================
-   AgriSmart AI Logo Constrained Sizing & Transform Animation
+   AgriNexa AI Logo Constrained Sizing & Transform Animation
    ============================================================ */
 
 .navbar-logo-img {
@@ -154,7 +153,7 @@ body {
 h1, h2, h3, h4 {
   color: var(--color-dark);
   line-height: 1.25;
-  font-weight: 700;
+  font-weight: 500;
   margin: 0;
 }
 

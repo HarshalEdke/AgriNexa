@@ -244,7 +244,7 @@ def test_cli_format_output(capsys):
     
     format_prediction_output(mock_result)
     captured = capsys.readouterr().out
-    assert "AGRISMART AI CROP RECOMMENDATION" in captured
+    assert "AGRINEXA AI CROP RECOMMENDATION" in captured
     assert "Ahmedabad, Gujarat" in captured
     assert "RICE" in captured
 
@@ -253,6 +253,5 @@ def test_cli_run_example(capsys):
     from model.crop_recommendation_v2.test_predict import run_example
     run_example(top_k=3)
     captured = capsys.readouterr().out
-    assert "AGRISMART AI CROP RECOMMENDATION" in captured
+    assert "AGRINEXA AI CROP RECOMMENDATION" in captured
     assert "Ahmedabad, Gujarat" in captured
-

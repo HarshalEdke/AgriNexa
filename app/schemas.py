@@ -184,7 +184,7 @@ class ChatContext(BaseModel):
     @field_validator("language")
     @classmethod
     def validate_language(cls, v: Optional[str]) -> Optional[str]:
-        if v is not None and v not in ("en", "hi", "gu"):
+        if v is not None and v not in ("en", "hi", "gu", "mr", "ta", "pa"):
             raise ValueError("unsupported language code")
         return v
 
@@ -225,7 +225,7 @@ class ChatRequest(BaseModel):
     @field_validator("language")
     @classmethod
     def validate_language(cls, v: Optional[str]) -> Optional[str]:
-        if v is not None and v not in ("en", "hi", "gu"):
+        if v is not None and v not in ("en", "hi", "gu", "mr", "ta", "pa"):
             raise ValueError("unsupported language code")
         return v
 
@@ -378,4 +378,3 @@ class WeatherIntelligenceResponse(BaseModel):
     farm_context_complete: bool
     data_source: str = "Open-Meteo API & India Meteorological Department (IMD) Normals"
     timestamp: Optional[datetime] = None
-

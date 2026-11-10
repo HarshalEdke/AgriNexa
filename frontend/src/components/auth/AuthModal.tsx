@@ -91,7 +91,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login' }: AuthModalP
             id="auth-modal-title"
             className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl"
           >
-            {mode === 'login' ? 'Sign In to AgriSmart AI' : 'Create an Account'}
+            {mode === 'login' ? 'Sign In to AgriNexa AI' : 'Create an Account'}
           </h2>
           <p className="mt-1 text-xs sm:text-sm text-slate-500">
             Authentication is optional. All diagnostic and advisory tools remain fully open.

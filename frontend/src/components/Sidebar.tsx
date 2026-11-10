@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Home, Sprout, Cpu, Sparkles, ChevronDown, Leaf, CloudSun, Bot } from 'lucide-react';
+import { Home, Sprout, Cpu, Sparkles, ChevronDown, Leaf, CloudSun, Bot, Droplets, Satellite } from 'lucide-react';
 import { useDiagnosis } from '../context/DiagnosisContext';
 
 export type AppView =
@@ -9,6 +9,8 @@ export type AppView =
   | 'crop-recommendation'
   | 'sustainability'
   | 'weather-intelligence'
+  | 'irrigation'
+  | 'satellite'
   | 'login'
   | 'signup';
 
@@ -19,6 +21,8 @@ interface SidebarProps {
   onNavigateCropRecommendation?: () => void;
   onNavigateSustainability?: () => void;
   onNavigateWeatherIntelligence?: () => void;
+  onNavigateIrrigation?: () => void;
+  onNavigateSatellite?: () => void;
   onNavigateModelInfo?: () => void;
   onNavigateHowItWorks?: () => void;
   className?: string;
@@ -30,6 +34,8 @@ export function Sidebar({
   onNavigateCropRecommendation,
   onNavigateSustainability,
   onNavigateWeatherIntelligence,
+  onNavigateIrrigation,
+  onNavigateSatellite,
   onNavigateModelInfo,
   onNavigateHowItWorks,
   className = '',
@@ -53,9 +59,11 @@ export function Sidebar({
   const isCropRecActive = activeView === 'crop-recommendation';
   const isSustainActive = activeView === 'sustainability';
   const isWeatherActive = activeView === 'weather-intelligence' || currentHash === '#weather-intelligence';
+  const isIrrigationActive = activeView === 'irrigation' || currentHash === '#irrigation';
+  const isSatelliteActive = activeView === 'satellite' || currentHash === '#satellite';
   const isAgronomistActive = isAgronomistOpen || isMissingDiagnosisOpen;
 
-  const isFarmInsightActive = isCropRecActive || isSustainActive || isWeatherActive || isAgronomistActive;
+  const isFarmInsightActive = isCropRecActive || isSustainActive || isWeatherActive || isIrrigationActive || isSatelliteActive || isAgronomistActive;
   const isDiagnoseActive = (activeView === 'diagnose' || activeView === 'home') && !isWeatherActive && !isAgronomistActive;
 
   // Submenu starts expanded if currently on a child route, or true by default
@@ -93,6 +101,16 @@ export function Sidebar({
     onNavigateWeatherIntelligence?.();
   };
 
+  const handleIrrigationClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onNavigateIrrigation?.();
+  };
+
+  const handleSatelliteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onNavigateSatellite?.();
+  };
+
   const handleAgronomistClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (activeDiagnosis) {
@@ -125,7 +143,7 @@ export function Sidebar({
   return (
     <aside
       aria-label="Main application sidebar"
-      className={`w-64 shrink-0 border-r border-[#E5E0D0] bg-[#FAF7EE] py-6 px-3 flex flex-col justify-between ${className}`}
+      className={`w-64 shrink-0 border-r border-[#EFE9D7] bg-white py-6 px-3 flex flex-col justify-between ${className}`}
     >
       <div className="space-y-6">
         {/* Sidebar Nav Header / Section title */}
@@ -280,6 +298,47 @@ export function Sidebar({
                   <span className="truncate">Weather Intelligence</span>
                 </button>
 
+                <button
+                  type="button"
+                  onClick={handleIrrigationClick}
+                  aria-current={isIrrigationActive ? 'page' : undefined}
+                  aria-label="Farm Insight — Smart Irrigation"
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer text-left ${
+                    isIrrigationActive
+                      ? 'bg-[#234E37] text-white shadow-2xs font-bold'
+                      : 'text-slate-600 hover:bg-[#EAE5D4] hover:text-[#1E4D35]'
+                  }`}
+                >
+                  <span
+                    className={`flex h-6 w-6 items-center justify-center rounded-lg ${
+                      isIrrigationActive ? 'bg-white/20 text-white' : 'bg-[#E8F3EC] text-[#234E37]'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    <Droplets size={13} strokeWidth={2.2} />
+                  </span>
+                  <span className="truncate">Smart Irrigation</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSatelliteClick}
+                  aria-current={isSatelliteActive ? 'page' : undefined}
+                  aria-label="Farm Insight — Satellite Farm Health"
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer text-left ${
+                    isSatelliteActive
+                      ? 'bg-[#234E37] text-white shadow-2xs font-bold'
+                      : 'text-slate-600 hover:bg-[#EAE5D4] hover:text-[#1E4D35]'
+                  }`}
+                >
+                  <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${
+                    isSatelliteActive ? 'bg-white/20 text-white' : 'bg-[#E8F3EC] text-[#234E37]'
+                  }`} aria-hidden="true">
+                    <Satellite size={13} strokeWidth={2.2} />
+                  </span>
+                  <span className="truncate">Satellite Farm Health</span>
+                </button>
+
                 {/* 2d. AI Agronomist */}
                 <button
                   type="button"
@@ -343,7 +402,7 @@ export function Sidebar({
       {/* Sidebar Footer Badge */}
       <div className="px-3 pt-6 border-t border-[#E5E0D0]/80">
         <div className="rounded-2xl bg-white/70 border border-[#E5E0D0] p-3 text-center">
-          <div className="text-[11px] font-bold text-[#163824]">AgriSmart AI v0.1</div>
+          <div className="text-[11px] font-bold text-[#163824]">AgriNexa AI v0.1</div>
           <div className="text-[10px] text-slate-500 font-medium mt-0.5">Dual-Engine Diagnostics</div>
         </div>
       </div>

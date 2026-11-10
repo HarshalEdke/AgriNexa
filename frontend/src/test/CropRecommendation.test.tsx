@@ -16,6 +16,8 @@ vi.mock('../api/client', async () => {
     recommendCrop: vi.fn(),
     getWeather: vi.fn(),
     getSeasonalClimate: vi.fn(),
+    getIrrigationDashboard: vi.fn().mockRejectedValue(new Error('Irrigation data unavailable in test.')),
+    getIrrigationAnalytics: vi.fn().mockRejectedValue(new Error('Irrigation data unavailable in test.')),
   };
 });
 
@@ -63,26 +65,26 @@ describe('Crop Recommendation Bonus Feature — Step 2 Layout and Navigation', (
     ).toBeInTheDocument();
   });
 
-  it('renders exactly two feature cards in the section', () => {
+  it('renders all five farm insight cards in the section', () => {
     render(<BonusFeaturesSection onSelectCropRecommendation={vi.fn()} />);
 
     const bonusSection = screen.getByRole('region', { name: /bonus features/i });
     const cards = within(bonusSection).getAllByRole('region');
-    expect(cards).toHaveLength(2);
+    expect(cards).toHaveLength(5);
   });
 
-  it('displays the two required titles: Crop Recommendation and Sustainability Score', () => {
+  it('displays all five farm insight titles', () => {
     render(<BonusFeaturesSection onSelectCropRecommendation={vi.fn()} />);
 
-    expect(
-      screen.getByRole('heading', { name: 'Crop Recommendation', level: 3 })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Sustainability Score', level: 3 })
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('heading', { name: 'Yield & Harvest Forecast', level: 3 })
-    ).not.toBeInTheDocument();
+    [
+      'Crop Recommendation',
+      'Sustainability Score',
+      'Weather Intelligence',
+      'Smart Irrigation',
+      'Satellite Farm Health',
+    ].forEach((title) => {
+      expect(screen.getByRole('heading', { name: title, level: 3 })).toBeInTheDocument();
+    });
   });
 
   it('renders both feature cards active without coming soon badges', () => {
@@ -165,17 +167,44 @@ describe('Crop Recommendation Bonus Feature — Step 2 Layout and Navigation', (
     ).toBeInTheDocument();
   });
 
+  it('opens Weather Intelligence from its Farm Insights card', async () => {
+    render(<App initialView="diagnose" />);
+
+    fireEvent.click(screen.getByRole('button', { name: /open weather intelligence/i }));
+
+    expect(await screen.findByRole('heading', { name: /weather & farm intelligence/i })).toBeInTheDocument();
+  });
+
+  it('opens Smart Irrigation from its Farm Insights card', async () => {
+    render(<App initialView="diagnose" />);
+
+    fireEvent.click(screen.getByRole('button', { name: /open smart irrigation/i }));
+
+    expect(window.location.hash).toBe('#irrigation');
+    expect(await screen.findByRole('heading', { name: /smart irrigation/i, level: 1 })).toBeInTheDocument();
+  });
+
+  it('opens Satellite Farm Health from its Farm Insights card', () => {
+    render(<App initialView="diagnose" />);
+
+    fireEvent.click(screen.getByRole('button', { name: /open satellite farm health/i }));
+
+    expect(
+      screen.getByRole('heading', { name: /satellite farm health/i })
+    ).toBeInTheDocument();
+  });
+
   it('navigates back to the Landing view when clicking the Header logo from Crop Recommendation', () => {
     render(<App initialView="diagnose" />);
 
     const tryBtn = screen.getByRole('button', { name: /try crop recommendation/i });
     fireEvent.click(tryBtn);
 
-    const brandHomeLink = screen.getByLabelText(/agrismart ai — home/i);
+    const brandHomeLink = screen.getByLabelText(/agrinexa ai — home/i);
     fireEvent.click(brandHomeLink);
 
     expect(
-      screen.getByRole('heading', { name: /where agriculture meets ai/i, level: 1 })
+      screen.getByRole('heading', { name: /a smarter way to care for your crops/i, level: 1 })
     ).toBeInTheDocument();
   });
 });
@@ -688,7 +717,7 @@ describe('Crop Recommendation API Integration — Step 4', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/network error: unable to connect to agrismart ai services/i)
+        screen.getByText(/network error: unable to connect to agrinexa ai services/i)
       ).toBeInTheDocument();
     });
 

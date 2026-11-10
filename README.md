@@ -1,14 +1,14 @@
-AgriSmart AI 🌾
+AgriNexa AI 🌾
 > **Intelligent Agriculture for a Sustainable Future**
-AgriSmart AI is an intelligent agricultural diagnostic and decision-support platform that combines computer vision, weather intelligence, agronomic recommendations, sustainability analytics, simulated IoT telemetry, and conversational AI to help farmers make faster and more informed decisions.
+AgriNexa AI is an intelligent agricultural diagnostic and decision-support platform that combines computer vision, weather intelligence, agronomic recommendations, sustainability analytics, simulated IoT telemetry, and conversational AI to help farmers make faster and more informed decisions.
 Team: WebShooters  
 Institution: LJ Institute of Engineering and Technology
 🎥 Demo : https://youtu.be/_znUEgbqXHk
-Watch the AgriSmart AI Demo
+Watch the AgriNexa AI Demo
 ---
 🌱 The Problem
 Farmers can lose yield because crop diseases are diagnosed late, agricultural advice is generic, and irrigation and input usage are not sufficiently adapted to local conditions.
-AgriSmart AI brings multiple decision-support capabilities into one platform:
+AgriNexa AI brings multiple decision-support capabilities into one platform:
 Detect crop diseases from leaf images.
 Reject unsuitable images and unsupported crops before disease prediction.
 Combine local weather forecasts with practical farm alerts.
@@ -23,6 +23,8 @@ Feature	Status	Description
 🌦️ Weather Intelligence	✅ Implemented	Live weather, 7-day forecast and agronomic alerts
 🌱 Crop Recommendation	✅ Implemented	Recommendations from N-P-K, soil pH, rainfall and temperature
 ♻️ Sustainability Score	✅ Implemented	0–100 resource-efficiency score with breakdown
+💧 Smart Irrigation	✅ Implemented	Authenticated field monitoring, transparent water-balance recommendations, schedules and measured irrigation history
+🛰️ Satellite Farm Health	🟡 Partial	Authenticated field boundaries, Copernicus Sentinel-2 NDVI statistics, georeferenced map overlays, history, insights and PDF reports
 📡 IoT Telemetry	✅ Implemented	Simulated farm sensor ingestion
 🤖 AI Agronomist	✅ Implemented	Multi-turn conversational agricultural assistance
 🧠 Agentic Advisor	🟡 Partial	Deterministic advisory rules implemented; autonomous multi-agent chaining remains future scope
@@ -97,7 +99,7 @@ Evaluation Limitations
 Performance can decrease under domain shift between curated/lab imagery and other field datasets. Visually similar disease/healthy classes and visually similar diseases remain challenging. The system therefore uses input-validity and confidence safeguards rather than presenting every prediction as certain.
 ---
 🌦️ Weather Intelligence
-AgriSmart AI combines weather forecasts with rule-based agricultural interpretation.
+AgriNexa AI combines weather forecasts with rule-based agricultural interpretation.
 The weather module provides:
 Current atmospheric conditions
 7-day forecast
@@ -111,6 +113,20 @@ Important endpoints:
 `POST /api/weather-intelligence`
 `GET /api/weather`
 `GET /api/seasonal-climate`
+---
+💧 Smart Irrigation
+Register user-owned fields with crop/stage, soil water limits, area, irrigation equipment and optional location. The dashboard supports soil-moisture readings, live Open-Meteo forecasts when available, manual weather inputs, recommendation explanations, scheduling, completed-water history, alerts and analytics.
+The engine calculates FAO-56 Penman–Monteith ET₀ only when the required daily temperature range, humidity, wind, solar radiation, latitude and elevation are available. Otherwise it reports an explicit root-zone soil-water-balance fallback. Water volume is calculated from irrigation depth and hectares; duration is only shown when system flow is configured.
+Generic crop Kc values are seeded as editable planning references; local crop/variety/stage values should be verified. Typical irrigation efficiencies are labeled assumptions and can be overridden. Rainfall savings are potential estimates, not measured savings. No trained irrigation ML model is configured.
+Field and sensor APIs require a bearer token. Simulated readings are marked `simulated`; hardware-labeled HTTP readings are not cryptographically verified, and MQTT ingestion is future integration work.
+Apply the database migration with `alembic upgrade head`. See `docs/api-contract.md` for the irrigation routes and `docs/architecture.md` for the calculation and persistence boundaries.
+---
+🛰️ Satellite Farm Health
+Satellite monitoring extends existing user-owned irrigation fields instead of creating duplicate farm records. Authenticated users can attach GeoJSON, KML, or WGS84 zipped-shapefile boundaries, request Sentinel-2 L2A NDVI statistics from Copernicus Data Space, inspect observations on an interactive map, review available history and download a PDF report.
+
+Configure a Copernicus Data Space OAuth client with Sentinel Hub Statistical API access using `COPERNICUS_CLIENT_ID` and `COPERNICUS_CLIENT_SECRET`. Without valid credentials, the dashboard clearly reports that satellite observations are unavailable. An optional fixed-value NDVI calculation demo is explicitly labeled synthetic, has no observation date, and is never saved as field data. Apply the latest schema with `alembic upgrade head`. See `docs/development-guide.md` for setup and `docs/api-contract.md` for the authenticated routes.
+
+Current limitations: spatial anomaly zones and additional vegetation indices are not calculated; cloud coverage for each individual acquisition is not returned by the statistics response; field history is limited to observations the user has requested and saved. NDVI is a screening indicator, not a crop diagnosis or irrigation recommendation.
 ---
 🌱 Crop Recommendation
 Farmers can provide:
@@ -224,7 +240,7 @@ GET	`/health`	Application/model readiness
 ---
 📁 Project Structure
 ```text
-AgriSmart-AI/
+AgriNexa/
 ├── app/
 ├── frontend/
 ├── model/
@@ -263,12 +279,13 @@ Start the API:
 ```bash
 uvicorn app.main:app --reload --port 8000
 ```
-Frontend
+Run the website frontend:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+Then open `http://localhost:5173` in your browser. Start the API in a separate terminal using the backend command above.
 The Vite development server communicates with the FastAPI backend through the configured `/api` proxy.
 ---
 🔐 Environment Variables
@@ -305,7 +322,7 @@ Backend integration
 Weather intelligence
 ---
 🛡️ Safety & Reliability
-AgriSmart AI is designed around a fail-safe diagnostic pipeline:
+AgriNexa AI is designed around a fail-safe diagnostic pipeline:
 Non-leaf/invalid imagery can be rejected before disease inference.
 Unsupported crops can be classified as `Other`.
 Low-confidence predictions can be marked inconclusive.
@@ -321,7 +338,7 @@ Domain shift between curated datasets and different real-world environments can 
 Visually similar diseases/classes remain challenging.
 Weather intelligence depends on external weather-service availability.
 The Agentic Advisor currently uses deterministic advisory logic; fully autonomous multi-agent tool chaining remains future scope.
-IoT functionality currently supports simulated telemetry rather than requiring physical farm hardware.
+Irrigation supports simulated or authenticated HTTP hardware-labeled readings; no MQTT broker, device credentials, or verified physical sensor integration is deployed.
 ---
 🔭 Future Scope
 More crops and disease classes

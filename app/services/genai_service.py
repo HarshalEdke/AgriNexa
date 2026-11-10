@@ -26,9 +26,15 @@ logger = logging.getLogger(__name__)
 _gemini_client = None
 _groq_client = None
 
+def _is_configured_api_key(api_key):
+    return bool(api_key and api_key.strip() and not api_key.strip().lower().startswith("your_"))
+
+def has_configured_chat_provider() -> bool:
+    return _is_configured_api_key(settings.GEMINI_API_KEY) or _is_configured_api_key(settings.GROQ_API_KEY)
+
 def get_gemini_client():
     global _gemini_client
-    if _gemini_client is None and settings.GEMINI_API_KEY:
+    if _gemini_client is None and _is_configured_api_key(settings.GEMINI_API_KEY):
         if genai is not None:
             try:
                 _gemini_client = genai.Client(api_key=settings.GEMINI_API_KEY)
@@ -41,7 +47,7 @@ def get_gemini_client():
 
 def get_groq_client():
     global _groq_client
-    if _groq_client is None and settings.GROQ_API_KEY:
+    if _groq_client is None and _is_configured_api_key(settings.GROQ_API_KEY):
         if Groq is not None:
             try:
                 _groq_client = Groq(api_key=settings.GROQ_API_KEY)
@@ -97,6 +103,14 @@ def _build_grounding_context(context: ChatContext) -> str:
 
 def _build_system_prompt(context: ChatContext, grounding_text: str) -> str:
     lang = context.language or "en"
+    language_name = {
+        "en": "English",
+        "hi": "Hindi",
+        "gu": "Gujarati",
+        "mr": "Marathi",
+        "ta": "Tamil",
+        "pa": "Punjabi",
+    }.get(lang, lang)
     return (
         "You are a helpful, simple, farmer-friendly agricultural assistant. "
         "Answer the farmer's question directly using ONLY the following Grounding Context. "
@@ -104,7 +118,8 @@ def _build_system_prompt(context: ChatContext, grounding_text: str) -> str:
         "If the information is not in the context, clearly state that you do not have that information. "
         "If the prediction is ambiguous/uncertain, communicate that uncertainty politely. "
         "If the question is unrelated to agriculture or the disease, politely redirect the user. "
-        f"IMPORTANT: The farmer-facing answer MUST be written entirely in the requested language (language code: {lang}). "
+        f"IMPORTANT: The farmer-facing answer MUST be written entirely in the requested language "
+        f"(language code: {lang}, language name: {language_name}). "
         "Disease names and technical terms may remain in their standard form if translating them reduces clarity, "
         "but all treatments, symptoms, precautions, and other facts must come ONLY from the Grounding Context.\n\n"
         "--- Grounding Context ---\n"

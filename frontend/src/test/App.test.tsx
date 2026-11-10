@@ -14,7 +14,7 @@ vi.mock('../api/client', async () => {
   };
 });
 
-describe('AgriSmart AI — Task 2 & Disease API Integration Workflow', () => {
+describe('AgriNexa AI — Task 2 & Disease API Integration Workflow', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -23,11 +23,11 @@ describe('AgriSmart AI — Task 2 & Disease API Integration Workflow', () => {
     render(<App />);
     expect(screen.queryByRole('banner')).not.toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: /where agriculture meets ai/i, level: 1 })
+      screen.getByRole('heading', { name: /a smarter way to care for your crops/i, level: 1 })
     ).toBeInTheDocument();
     
     // Click Get Started button
-    const getStartedBtn = screen.getByRole('button', { name: /get started with agrismart ai/i });
+    const getStartedBtn = screen.getByRole('button', { name: /get started with agrinexa ai/i });
     expect(getStartedBtn).toBeInTheDocument();
     fireEvent.click(getStartedBtn);
 
@@ -38,7 +38,7 @@ describe('AgriSmart AI — Task 2 & Disease API Integration Workflow', () => {
     ).toBeInTheDocument();
     const footer = screen.getByRole('contentinfo');
     expect(footer).toBeInTheDocument();
-    expect(footer.textContent).toMatch(/agrismart ai/i);
+    expect(footer.textContent).toMatch(/agrinexa ai/i);
   });
 
   it('renders empty initial upload state with clear farmer-friendly instructions', () => {

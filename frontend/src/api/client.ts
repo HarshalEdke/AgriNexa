@@ -14,7 +14,24 @@ import {
   IoTPresetsResponse,
   WeatherIntelligenceRequest,
   WeatherIntelligenceResponse,
+  IrrigationAnalytics,
+  IrrigationDashboard,
+  IrrigationField,
+  IrrigationFieldInput,
+  IrrigationHistory,
+  IrrigationRecommendation,
+  IrrigationSchedule,
+  IrrigationSensorReading,
+  IrrigationWeather,
+  IrrigationWeatherInput,
 } from '../types';
+import {
+  SatelliteAvailability,
+  SatelliteDemo,
+  SatelliteField,
+  SatelliteInsights,
+  SatelliteObservation,
+} from '../types/satellite';
 
 export class ApiError extends Error {
 
@@ -25,6 +42,114 @@ export class ApiError extends Error {
     this.name = 'ApiError';
     this.status = status;
   }
+}
+
+async function satelliteRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const headers = new Headers(init.headers);
+  const token = typeof localStorage !== 'undefined' ? localStorage.getItem('access_token') : null;
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+  if (init.body && !(init.body instanceof FormData) && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(path, { ...init, headers });
+  } catch {
+    throw new ApiError(0, 'Unable to connect to the satellite monitoring service.');
+  }
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ detail: response.statusText }));
+    throw new ApiError(
+      response.status,
+      extractErrorMessage(errorData, response.status, 'Satellite request failed.')
+    );
+  }
+  return response.json() as Promise<T>;
+}
+
+async function satelliteBlob(path: string): Promise<Blob> {
+  const headers = new Headers();
+  const token = typeof localStorage !== 'undefined' ? localStorage.getItem('access_token') : null;
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+
+  let response: Response;
+  try {
+    response = await fetch(path, { headers });
+  } catch {
+    throw new ApiError(0, 'Unable to connect to the satellite monitoring service.');
+  }
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ detail: response.statusText }));
+    throw new ApiError(
+      response.status,
+      extractErrorMessage(errorData, response.status, 'Satellite download failed.')
+    );
+  }
+  return response.blob();
+}
+
+export function getSatelliteStatus(): Promise<SatelliteAvailability> {
+  return satelliteRequest('/api/satellite/status');
+}
+
+export function getSatelliteDemo(): Promise<SatelliteDemo> {
+  return satelliteRequest('/api/satellite/demo-data');
+}
+
+export function getSatelliteFields(): Promise<SatelliteField[]> {
+  return satelliteRequest('/api/satellite/fields');
+}
+
+export function saveSatelliteBoundary(
+  fieldId: number,
+  geometry: Record<string, unknown>
+): Promise<SatelliteField> {
+  return satelliteRequest('/api/satellite/fields', {
+    method: 'POST',
+    body: JSON.stringify({ field_id: fieldId, geometry }),
+  });
+}
+
+export function uploadSatelliteBoundary(fieldId: number, file: File): Promise<SatelliteField> {
+  const body = new FormData();
+  body.append('file', file);
+  return satelliteRequest(`/api/satellite/fields/${fieldId}/boundary-file`, {
+    method: 'POST',
+    body,
+  });
+}
+
+export function analyzeSatelliteField(
+  fieldId: number,
+  startDate: string,
+  endDate: string,
+  maxCloudCoveragePercent = 30
+): Promise<SatelliteObservation[]> {
+  return satelliteRequest(`/api/satellite/analyze/${fieldId}`, {
+    method: 'POST',
+    body: JSON.stringify({
+      start_date: startDate,
+      end_date: endDate,
+      max_cloud_coverage_percent: maxCloudCoveragePercent,
+    }),
+  });
+}
+
+export function getSatelliteHistory(fieldId: number): Promise<SatelliteObservation[]> {
+  return satelliteRequest(`/api/satellite/history?field_id=${fieldId}`);
+}
+
+export function getSatelliteInsights(fieldId: number): Promise<SatelliteInsights> {
+  return satelliteRequest(`/api/satellite/health-insights?field_id=${fieldId}`);
+}
+
+export function getSatelliteMap(fieldId: number, acquisitionDate: string): Promise<Blob> {
+  return satelliteBlob(`/api/satellite/map/${fieldId}/${encodeURIComponent(acquisitionDate)}`);
+}
+
+export function downloadSatelliteReport(fieldId: number): Promise<Blob> {
+  return satelliteBlob(`/api/satellite/report?field_id=${fieldId}`);
 }
 
 export function extractErrorMessage(
@@ -444,4 +569,126 @@ export async function getIoTPresets(): Promise<IoTPresetsResponse> {
   return res.json();
 }
 
+async function irrigationRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const headers = new Headers(init.headers);
+  if (init.body && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+  try {
+    const token = localStorage.getItem('access_token');
+    if (token) headers.set('Authorization', `Bearer ${token}`);
+  } catch {
+    // The API will return its normal authentication error if storage is unavailable.
+  }
 
+  let response: Response;
+  try {
+    response = await fetch(`/api/irrigation${path}`, { ...init, headers });
+  } catch {
+    throw new ApiError(0, 'Unable to connect to the irrigation service. Please check your network connection.');
+  }
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ detail: response.statusText }));
+    throw new ApiError(
+      response.status,
+      extractErrorMessage(errorData, response.status, 'Irrigation request failed.')
+    );
+  }
+  return response.json() as Promise<T>;
+}
+
+export function getIrrigationDashboard(): Promise<IrrigationDashboard> {
+  return irrigationRequest('/dashboard');
+}
+
+export function getIrrigationAnalytics(): Promise<IrrigationAnalytics> {
+  return irrigationRequest('/analytics');
+}
+
+export function getIrrigationFields(): Promise<IrrigationField[]> {
+  return irrigationRequest('/fields');
+}
+
+export function createIrrigationField(data: IrrigationFieldInput): Promise<IrrigationField> {
+  return irrigationRequest('/fields', { method: 'POST', body: JSON.stringify(data) });
+}
+
+export function generateIrrigationRecommendation(
+  fieldId: number,
+  weather?: IrrigationWeatherInput
+): Promise<IrrigationRecommendation> {
+  return irrigationRequest('/recommendation/generate', {
+    method: 'POST',
+    body: JSON.stringify({ field_id: fieldId, ...(weather ? { weather } : {}) }),
+  });
+}
+
+export function getIrrigationWeather(fieldId: number): Promise<IrrigationWeather> {
+  return irrigationRequest(`/weather/?field_id=${encodeURIComponent(fieldId)}`);
+}
+
+export function createIrrigationSchedule(
+  recommendationId: number,
+  scheduledAt: string,
+  notes?: string
+): Promise<IrrigationSchedule> {
+  return irrigationRequest('/schedule', {
+    method: 'POST',
+    body: JSON.stringify({
+      recommendation_id: recommendationId,
+      scheduled_at: scheduledAt,
+      notes,
+    }),
+  });
+}
+
+export function postponeIrrigationSchedule(
+  scheduleId: number,
+  scheduledAt: string,
+  notes?: string
+): Promise<IrrigationSchedule> {
+  return irrigationRequest(`/schedules/${scheduleId}/postpone`, {
+    method: 'POST',
+    body: JSON.stringify({ scheduled_at: scheduledAt, notes }),
+  });
+}
+
+export function completeIrrigationSchedule(
+  scheduleId: number,
+  waterUsedLitres: number,
+  durationMinutes?: number
+): Promise<IrrigationSchedule> {
+  return irrigationRequest(`/schedules/${scheduleId}/complete`, {
+    method: 'POST',
+    body: JSON.stringify({
+      water_used_litres: waterUsedLitres,
+      ...(durationMinutes ? { duration_minutes: durationMinutes } : {}),
+    }),
+  });
+}
+
+export function recordIrrigationHistory(data: {
+  field_id: number;
+  irrigated_at: string;
+  water_used_litres: number;
+  duration_minutes?: number;
+  notes?: string;
+}): Promise<IrrigationHistory> {
+  return irrigationRequest('/history/', { method: 'POST', body: JSON.stringify(data) });
+}
+
+export function submitIrrigationSensorReading(
+  fieldId: number,
+  data: {
+    soil_moisture_percent: number;
+    temperature_c?: number;
+    humidity_percent?: number;
+    source: 'simulated' | 'hardware';
+    device_id?: string;
+  }
+): Promise<IrrigationSensorReading> {
+  return irrigationRequest(`/fields/${fieldId}/sensor-readings`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}

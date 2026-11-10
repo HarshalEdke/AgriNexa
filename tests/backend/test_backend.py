@@ -11,7 +11,7 @@ def client():
 def test_app_imports():
     """Verify FastAPI application instance imports cleanly."""
     assert app is not None
-    assert app.title == "AgriSmart AI"
+    assert app.title == "AgriNexa AI"
 
 def test_health_endpoint(client):
     """Verify GET /health returns HTTP 200 and {'status': 'ok'}."""

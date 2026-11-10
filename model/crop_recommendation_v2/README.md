@@ -1,4 +1,4 @@
-# AgriSmart AI Crop Recommendation Model v2 (Farmer-Friendly Architecture)
+# AgriNexa AI Crop Recommendation Model v2 (Farmer-Friendly Architecture)
 
 ## 1. Overview & Motivation
 

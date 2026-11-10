@@ -446,7 +446,7 @@ export function CropRecommendationPage({
           message = err.message || `Request failed with status: ${err.status}`;
         }
       } else if (err instanceof TypeError && /fetch|network/i.test(err.message)) {
-        message = 'Network error: Unable to connect to AgriSmart AI services. Please check your internet connection and try again.';
+        message = 'Network error: Unable to connect to AgriNexa AI services. Please check your internet connection and try again.';
       } else if (err instanceof Error) {
         message = err.message;
       }

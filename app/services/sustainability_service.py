@@ -1,4 +1,4 @@
-"""Deterministic Sustainability Scoring Engine for AgriSmart AI.
+"""Deterministic Sustainability Scoring Engine for AgriNexa AI.
 
 Evaluates 4 transparent dimensions:
 1. Water Conservation & Irrigation Timing (0–40 pts) - Soil-Profile Aware

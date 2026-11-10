@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 from app.schemas import ChatRequest, ChatAnswer, ChatContext, WeatherContext, DiseaseMetadata as GenAIDiseaseMetadata, ChatSessionResponse, ChatMessageResponse, ChatHistoryMessage
 from app.services.disease_metadata_service import DiseaseMetadataService, get_default_metadata_service
-from app.services.genai_service import generate_chat_answer
+from app.services.genai_service import generate_chat_answer, has_configured_chat_provider
 from app.core.errors import ChatProviderUnavailableError, AppError, DatabaseError
 from app.dependencies import get_optional_user, get_db_session, get_current_user
 from app.db.models.user import User
@@ -71,9 +71,15 @@ async def chat(
         if current_user:
             await db.rollback()
         logger.warning("Chat service unavailable: %s", e)
+        detail = (
+            "Chat AI is not configured. Add a valid GEMINI_API_KEY or GROQ_API_KEY "
+            "to the backend .env file, then restart the backend."
+            if not has_configured_chat_provider()
+            else "Chat service is currently unavailable. Please try again later."
+        )
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Chat service is currently unavailable. Please try again later."
+            detail=detail
         )
     except Exception as e:
         if current_user:

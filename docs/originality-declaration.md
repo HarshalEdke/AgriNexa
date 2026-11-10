@@ -1,8 +1,8 @@
-# AgriSmart AI — Originality and Attribution Declaration
+# AgriNexa AI — Originality and Attribution Declaration
 
 ## Declaration Template
 
-We hereby certify that the AgriSmart AI project developed for Smart India Hackathon 2026 adheres to the highest standards of academic and professional integrity:
+We hereby certify that the AgriNexa AI project developed for Smart India Hackathon 2026 adheres to the highest standards of academic and professional integrity:
 
 1. **Original Implementation**: All project architecture, training orchestration, backend API endpoints, and user interfaces are original implementations developed by this team.
 2. **Third-Party Libraries**: Open-source libraries (e.g., PyTorch, torchvision, timm, FastAPI, React) are utilized in full accordance with their respective open-source licenses (MIT, Apache 2.0, BSD).

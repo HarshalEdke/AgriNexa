@@ -106,6 +106,18 @@ const QUICK_PROMPTS_BY_LANG: Record<ChatLanguage, QuickPrompt[]> = {
     { label: 'ઉપચાર અને દવા', prompt: 'આ રોગના નિયંત્રણ માટે કઈ દવા કે છંટકાવ કરવો જોઈએ?' },
     { label: 'સાવચેતી અને બચાવ', prompt: 'આ રોગને અન્ય છોડમાં ફેલાતો અટકાવવા શું કરવું જોઈએ?' },
   ],
+  mr: [
+    { label: 'उपचार आणि औषधे', prompt: 'या रोगासाठी कोणते उपचार किंवा फवारणी करावी?' },
+    { label: 'प्रतिबंधात्मक उपाय', prompt: 'हा रोग इतर झाडांमध्ये पसरू नये यासाठी काय करावे?' },
+  ],
+  ta: [
+    { label: 'சிகிச்சை மற்றும் மருந்து', prompt: 'இந்த நோய்க்கு என்ன சிகிச்சை அல்லது தெளிப்பு செய்ய வேண்டும்?' },
+    { label: 'தடுப்பு நடவடிக்கைகள்', prompt: 'இந்த நோய் மற்ற செடிகளுக்குப் பரவாமல் தடுக்க என்ன செய்ய வேண்டும்?' },
+  ],
+  pa: [
+    { label: 'ਇਲਾਜ ਅਤੇ ਦਵਾਈ', prompt: 'ਇਸ ਬਿਮਾਰੀ ਲਈ ਕਿਹੜਾ ਇਲਾਜ ਜਾਂ ਛਿੜਕਾਅ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ?' },
+    { label: 'ਬਚਾਅ ਦੇ ਤਰੀਕੇ', prompt: 'ਇਸ ਬਿਮਾਰੀ ਨੂੰ ਹੋਰ ਪੌਦਿਆਂ ਵਿੱਚ ਫੈਲਣ ਤੋਂ ਰੋਕਣ ਲਈ ਕੀ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ?' },
+  ],
 };
 
 function getGreeting(language: ChatLanguage, displayName: string): string {
@@ -114,6 +126,15 @@ function getGreeting(language: ChatLanguage, displayName: string): string {
   }
   if (language === 'gu') {
     return `નમસ્તે! હું તમારો કૃષિ AI સહાયક છું. તમારા પાકનું નિદાન "${displayName}" થયેલ છે. તમે આ રોગના લક્ષણો, સારવાર અથવા નિવારણ વિશે પ્રશ્નો પૂછી શકો છો.`;
+  }
+  if (language === 'mr') {
+    return `नमस्कार! मी तुमचा कृषी AI सहाय्यक आहे. तुमच्या पिकाचे निदान "${displayName}" असे झाले आहे. लक्षणे, प्रतिबंध किंवा उपचारांबद्दल तुम्ही प्रश्न विचारू शकता.`;
+  }
+  if (language === 'ta') {
+    return `வணக்கம்! நான் உங்கள் வேளாண்மை AI உதவியாளர். உங்கள் பயிருக்கு "${displayName}" என்று கண்டறியப்பட்டுள்ளது. அறிகுறிகள், தடுப்பு அல்லது சிகிச்சை பற்றி கேளுங்கள்.`;
+  }
+  if (language === 'pa') {
+    return `ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡਾ ਖੇਤੀਬਾੜੀ AI ਸਹਾਇਕ ਹਾਂ। ਤੁਹਾਡੀ ਫ਼ਸਲ ਦੀ ਜਾਂਚ "${displayName}" ਵਜੋਂ ਹੋਈ ਹੈ। ਲੱਛਣਾਂ, ਰੋਕਥਾਮ ਜਾਂ ਇਲਾਜ ਬਾਰੇ ਪੁੱਛੋ।`;
   }
   return `Hello! I am your AI Agronomist assistant. Your diagnosis is "${displayName}". Ask me anything about symptoms, chemical/organic treatments, or prevention practices.`;
 }
@@ -257,6 +278,12 @@ export function DiagnosisChatAssistant({
         recognition.lang = 'hi-IN';
       } else if (language === 'gu') {
         recognition.lang = 'gu-IN';
+      } else if (language === 'mr') {
+        recognition.lang = 'mr-IN';
+      } else if (language === 'ta') {
+        recognition.lang = 'ta-IN';
+      } else if (language === 'pa') {
+        recognition.lang = 'pa-IN';
       } else {
         recognition.lang = 'en-US';
       }
@@ -476,7 +503,7 @@ export function DiagnosisChatAssistant({
 
           <div className="flex items-center gap-2">
             {/* Language Selector */}
-            <div className="flex items-center rounded-xl bg-white border border-slate-200 p-0.5 shadow-2xs">
+            <div className="flex flex-wrap items-center justify-center rounded-xl bg-white border border-slate-200 p-0.5 shadow-2xs max-w-[min(52vw,360px)]">
               <Globe2 size={13} className="ml-2 text-slate-400" aria-hidden="true" />
               <button
                 type="button"
@@ -507,6 +534,36 @@ export function DiagnosisChatAssistant({
                 aria-label="Switch language to Gujarati"
               >
                 ગુજરાતી
+              </button>
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('mr')}
+                className={`px-2 py-1 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                  language === 'mr' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                aria-label="Switch language to Marathi"
+              >
+                मराठी
+              </button>
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('ta')}
+                className={`px-2 py-1 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                  language === 'ta' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                aria-label="Switch language to Tamil"
+              >
+                தமிழ்
+              </button>
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('pa')}
+                className={`px-2 py-1 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                  language === 'pa' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                aria-label="Switch language to Punjabi"
+              >
+                ਪੰਜਾਬੀ
               </button>
             </div>
 
@@ -866,6 +923,12 @@ export function DiagnosisChatAssistant({
                       ? 'इस रोग के बारे में प्रश्न पूछें...'
                       : language === 'gu'
                       ? 'આ રોગ વિશે પ્રશ્ન પૂછો...'
+                      : language === 'mr'
+                      ? 'या रोगाबद्दल प्रश्न विचारा...'
+                      : language === 'ta'
+                      ? 'இந்த நோயைப் பற்றி கேளுங்கள்...'
+                      : language === 'pa'
+                      ? 'ਇਸ ਬਿਮਾਰੀ ਬਾਰੇ ਸਵਾਲ ਪੁੱਛੋ...'
                       : 'Ask about symptoms, treatments, or prevention...'
                   }
                   className={`w-full rounded-xl border bg-slate-50/50 pl-4 pr-11 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 disabled:bg-slate-100 transition-all ${

@@ -1,1 +1,1 @@
-"""AgriSmart AI API routes package."""
+"""AgriNexa AI API routes package."""

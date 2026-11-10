@@ -17,7 +17,7 @@ if _env_file.exists():
                     os.environ[key] = val
 
 class Settings(BaseModel):
-    PROJECT_NAME: str = "AgriSmart AI"
+    PROJECT_NAME: str = "AgriNexa AI"
     VERSION: str = "0.1.0"
     ENVIRONMENT: str = Field(default_factory=lambda: os.getenv("ENVIRONMENT", "development"))
     DATABASE_URL: str = Field(
@@ -70,6 +70,33 @@ class Settings(BaseModel):
     WEATHER_REQUEST_TIMEOUT_SECONDS: float = Field(
         default_factory=lambda: float(os.getenv("WEATHER_REQUEST_TIMEOUT_SECONDS", "5.0"))
     )
+    COPERNICUS_CLIENT_ID: Optional[str] = Field(
+        default_factory=lambda: os.getenv("COPERNICUS_CLIENT_ID")
+    )
+    COPERNICUS_CLIENT_SECRET: Optional[str] = Field(
+        default_factory=lambda: os.getenv("COPERNICUS_CLIENT_SECRET")
+    )
+    COPERNICUS_TOKEN_URL: str = Field(
+        default_factory=lambda: os.getenv(
+            "COPERNICUS_TOKEN_URL",
+            "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token",
+        )
+    )
+    COPERNICUS_STATISTICAL_URL: str = Field(
+        default_factory=lambda: os.getenv(
+            "COPERNICUS_STATISTICAL_URL",
+            "https://sh.dataspace.copernicus.eu/api/v1/statistical",
+        )
+    )
+    COPERNICUS_PROCESS_URL: str = Field(
+        default_factory=lambda: os.getenv(
+            "COPERNICUS_PROCESS_URL",
+            "https://sh.dataspace.copernicus.eu/api/v1/process",
+        )
+    )
+    SATELLITE_REQUEST_TIMEOUT_SECONDS: float = Field(
+        default_factory=lambda: float(os.getenv("SATELLITE_REQUEST_TIMEOUT_SECONDS", "30"))
+    )
     # JWT Settings
     JWT_SECRET_KEY: str = Field(
         default_factory=lambda: os.environ["JWT_SECRET_KEY"]
@@ -79,5 +106,3 @@ class Settings(BaseModel):
 
 
 settings = Settings()
-
-

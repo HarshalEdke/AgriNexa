@@ -1,4 +1,4 @@
-"""Simulated IoT Sensor Service for AgriSmart AI.
+"""Simulated IoT Sensor Service for AgriNexa AI.
 
 Provides deterministic, reproducible telemetry representing root-zone capacitance,
 soil temperature probes, and smart irrigation flow meters.

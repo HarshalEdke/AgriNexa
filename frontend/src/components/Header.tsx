@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { AgriSmartLogo } from './AgriSmartLogo';
+import { AgriNexaLogo } from './AgriNexaLogo';
 
 interface HeaderProps {
-  activeView?: 'landing' | 'home' | 'diagnose' | 'crop-recommendation' | 'sustainability' | 'weather-intelligence' | 'login' | 'signup';
+  activeView?: 'landing' | 'home' | 'diagnose' | 'crop-recommendation' | 'sustainability' | 'weather-intelligence' | 'irrigation' | 'satellite' | 'login' | 'signup';
   onNavigateHome?: () => void;
   onNavigateDiagnose?: () => void;
   onNavigateCropRecommendation?: () => void;
   onNavigateSustainability?: () => void;
   onNavigateWeatherIntelligence?: () => void;
+  onNavigateIrrigation?: () => void;
+  onNavigateSatellite?: () => void;
   onNavigateModelInfo?: () => void;
   onNavigateHowItWorks?: () => void;
   onNavigateLogin?: () => void;
@@ -24,6 +26,8 @@ export function Header({
   onNavigateCropRecommendation,
   onNavigateSustainability: _onNavigateSustainability,
   onNavigateWeatherIntelligence,
+  onNavigateIrrigation,
+  onNavigateSatellite,
   onNavigateModelInfo,
   onNavigateHowItWorks,
   onNavigateLogin,
@@ -91,26 +95,26 @@ export function Header({
   return (
     <header
       role="banner"
-      className="sticky top-0 z-50 border-b border-[#E5E0D0] bg-[#FAF7EE]/95 backdrop-blur-md shadow-2xs"
+      className="sticky top-0 z-50 border-b border-[#EFE9D7] bg-white/95 backdrop-blur-md"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 sm:h-20 items-center justify-between gap-4">
 
-          {/* Left Side: Logo & AgriSmart AI Branding */}
+          {/* Left Side: Logo & AgriNexa AI Branding */}
           <a
             href="#diagnose"
-            aria-label="AgriSmart AI — home"
+            aria-label="AgriNexa AI — home"
             onClick={handleBrandClick}
             className="flex items-center gap-2.5 no-underline hover:no-underline focus-visible:rounded-lg shrink-0 min-w-0"
           >
             <div
-              className="flex h-9 w-9 max-h-9 max-w-9 items-center justify-center rounded-xl bg-[#E8F3EC] p-1 transition-transform hover:scale-105 shadow-2xs shrink-0 overflow-hidden"
+              className="flex h-9 w-9 max-h-9 max-w-9 items-center justify-center rounded-full bg-[#FEF7E1] p-1 transition-transform hover:scale-105 shrink-0 overflow-hidden"
               aria-hidden="true"
             >
-              <AgriSmartLogo variant="navbar" size={32} />
+              <AgriNexaLogo variant="navbar" size={32} />
             </div>
-            <span className="text-xl font-bold tracking-tight text-[#163824] shrink-0 whitespace-nowrap">
-              AgriSmart <span className="font-serif italic font-normal text-[#2D6A4F]">AI</span>
+            <span className="text-xl font-medium tracking-tight text-[#35322D] shrink-0 whitespace-nowrap">
+              AgriNexa <span className="text-[#6CBE03]">AI</span>
             </span>
           </a>
 
@@ -136,7 +140,7 @@ export function Header({
                 <button
                   type="button"
                   onClick={handleLoginClick}
-                  className="rounded-full border border-[#2D5A3D]/40 bg-white px-3.5 sm:px-4 py-1.5 text-xs font-semibold text-[#1E4D35] hover:bg-[#F0F7F2] hover:border-[#2D5A3D] transition-colors cursor-pointer"
+                  className="min-h-10 rounded-full border border-[#6CBE03]/50 bg-white px-4 py-2 text-sm font-medium text-[#2A4D11] transition-colors hover:bg-[#EAF6DA] cursor-pointer"
                   aria-label="Login"
                 >
                   Login
@@ -146,7 +150,7 @@ export function Header({
                 <button
                   type="button"
                   onClick={handleSignupClick}
-                  className="rounded-full bg-emerald-600 px-3.5 sm:px-4 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-emerald-700 transition-colors cursor-pointer"
+                  className="min-h-10 rounded-full bg-[#FFB700] px-4 py-2 text-sm font-semibold text-[#212529] transition-colors hover:bg-[#F2AD00] cursor-pointer"
                   aria-label="Sign Up"
                 >
                   Sign Up
@@ -198,7 +202,7 @@ export function Header({
                 aria-expanded={mobileFarmInsightOpen}
                 aria-label="Farm Insight"
                 className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-base font-medium cursor-pointer transition-colors ${
-                  activeView === 'crop-recommendation' || activeView === 'sustainability' || activeView === 'weather-intelligence'
+                  activeView === 'crop-recommendation' || activeView === 'sustainability' || activeView === 'weather-intelligence' || activeView === 'irrigation' || activeView === 'satellite'
                     ? 'text-[#1E4D35] bg-[#E4EFE7] font-semibold'
                     : 'text-slate-700 hover:bg-[#EAE5D4] hover:text-[#1E4D35]'
                 }`}
@@ -259,6 +263,36 @@ export function Header({
                     }`}
                   >
                     Weather Intelligence
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigateIrrigation?.();
+                    }}
+                    aria-label="Farm Insight — Smart Irrigation"
+                    className={`block w-full text-left rounded-xl px-3 py-2 text-sm font-medium transition-colors cursor-pointer ${
+                      activeView === 'irrigation'
+                        ? 'bg-[#234E37] text-white font-bold'
+                        : 'text-slate-600 hover:bg-[#EAE5D4] hover:text-[#1E4D35]'
+                    }`}
+                  >
+                    Smart Irrigation
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigateSatellite?.();
+                    }}
+                    aria-label="Farm Insight — Satellite Farm Health"
+                    className={`block w-full text-left rounded-xl px-3 py-2 text-sm font-medium transition-colors cursor-pointer ${
+                      activeView === 'satellite'
+                        ? 'bg-[#234E37] text-white font-bold'
+                        : 'text-slate-600 hover:bg-[#EAE5D4] hover:text-[#1E4D35]'
+                    }`}
+                  >
+                    Satellite Farm Health
                   </button>
                 </div>
               )}

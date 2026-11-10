@@ -1,4 +1,4 @@
-# AgriSmart AI Crop Recommendation Model v2: Dataset Audit & Multi-Source Synthesis Report
+# AgriNexa AI Crop Recommendation Model v2: Dataset Audit & Multi-Source Synthesis Report
 
 ## 1. Executive Summary & Provenance
 

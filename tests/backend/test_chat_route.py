@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
 
 from app.main import app
-from app.schemas import ChatAnswer, ChatContext
+from app.schemas import ChatAnswer, ChatContext, ChatRequest
 from app.core.errors import ChatProviderUnavailableError
 
 client = TestClient(app)
@@ -94,12 +94,20 @@ def test_chat_validation_probability_bounds():
     assert response.status_code == 422
 
 def test_chat_validation_invalid_language():
-    """Verify language must be one of en, hi, gu."""
+    """Verify unsupported language codes are rejected."""
     payload = VALID_PAYLOAD.copy()
     payload["language"] = "fr"
     
     response = client.post("/api/chat", json=payload)
     assert response.status_code == 422
+
+@pytest.mark.parametrize("language", ["mr", "ta", "pa"])
+def test_chat_validation_new_languages(language):
+    """Verify Marathi, Tamil, and Punjabi are accepted language codes."""
+    payload = {**VALID_PAYLOAD, "language": language}
+    request = ChatRequest(**payload)
+
+    assert request.language == language
 
 def test_chat_validation_empty_question():
     """Verify question cannot be empty or just whitespace."""
@@ -119,10 +127,25 @@ def test_chat_validation_question_too_long():
 
 def test_chat_provider_unavailable():
     """Verify route handles ChatProviderUnavailableError with HTTP 503."""
-    with patch("app.api.routes.chat.generate_chat_answer", side_effect=ChatProviderUnavailableError("All providers failed.")):
+    with (
+        patch("app.api.routes.chat.has_configured_chat_provider", return_value=True),
+        patch("app.api.routes.chat.generate_chat_answer", side_effect=ChatProviderUnavailableError("All providers failed.")),
+    ):
         response = client.post("/api/chat", json=VALID_PAYLOAD)
         assert response.status_code == 503
         assert "unavailable" in response.json()["detail"].lower()
+
+def test_chat_missing_provider_configuration():
+    """Tell users when neither supported chat provider is configured."""
+    with (
+        patch("app.api.routes.chat.has_configured_chat_provider", return_value=False),
+        patch("app.api.routes.chat.generate_chat_answer", side_effect=ChatProviderUnavailableError()),
+    ):
+        response = client.post("/api/chat", json=VALID_PAYLOAD)
+
+    assert response.status_code == 503
+    assert "GEMINI_API_KEY" in response.json()["detail"]
+    assert "GROQ_API_KEY" in response.json()["detail"]
 
 def test_chat_unexpected_error():
     """Verify route handles unexpected errors with HTTP 500."""

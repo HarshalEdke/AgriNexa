@@ -262,6 +262,18 @@ def test_language_gu_prompt(valid_context):
     prompt = _build_system_prompt(valid_context, grounding)
     assert "language code: gu" in prompt
 
+@pytest.mark.parametrize(
+    ("language", "language_name"),
+    [("mr", "Marathi"), ("ta", "Tamil"), ("pa", "Punjabi")],
+)
+def test_new_language_prompts(valid_context, language, language_name):
+    valid_context.language = language
+    grounding = _build_grounding_context(valid_context)
+    prompt = _build_system_prompt(valid_context, grounding)
+
+    assert f"language code: {language}" in prompt
+    assert f"language name: {language_name}" in prompt
+
 def test_language_default_prompt():
     context = ChatContext(
         predicted_class="Apple_scab",
@@ -371,5 +383,4 @@ def test_provider_hierarchy_and_model_configuration(mock_get_groq, mock_get_gemi
     assert ans_fallback.answer == "Fallback Groq Qwen Answer"
     mock_groq.chat.completions.create.assert_called_once()
     assert mock_groq.chat.completions.create.call_args[1]["model"] == "qwen/qwen3.8-27b"
-
 

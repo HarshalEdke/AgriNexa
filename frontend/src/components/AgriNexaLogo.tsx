@@ -1,4 +1,4 @@
-interface AgriSmartLogoProps {
+interface AgriNexaLogoProps {
   className?: string;
   size?: number;
   variant?: 'navbar' | 'intro' | 'footer' | 'custom';
@@ -7,14 +7,14 @@ interface AgriSmartLogoProps {
   animated?: boolean;
 }
 
-export function AgriSmartLogo({
+export function AgriNexaLogo({
   className = '',
   size,
   variant = 'navbar',
   color: _color,
-  alt = 'AgriSmart AI logo',
+  alt = 'AgriNexa AI logo',
   animated = true,
-}: AgriSmartLogoProps) {
+}: AgriNexaLogoProps) {
   // Determine standard pixel dimension by variant or custom size
   const dimension = size ?? (variant === 'intro' ? 56 : variant === 'footer' ? 28 : 36);
 
@@ -40,7 +40,7 @@ export function AgriSmartLogo({
       }}
     >
       <img
-        src="/agrismart-logo.png"
+        src="/agrinexa-logo.png"
         alt={alt}
         width={dimension}
         height={dimension}
@@ -58,4 +58,4 @@ export function AgriSmartLogo({
   );
 }
 
-export default AgriSmartLogo;
+export default AgriNexaLogo;

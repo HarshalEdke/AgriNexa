@@ -1,4 +1,4 @@
-"""Command-line test interface for AgriSmart AI Crop Recommendation Model v2."""
+"""Command-line test interface for AgriNexa AI Crop Recommendation Model v2."""
 
 import argparse
 import sys
@@ -15,7 +15,7 @@ from model.crop_recommendation_v2.preprocessing import ALLOWED_SOIL_TYPES
 def format_prediction_output(result: dict) -> None:
     """Print beautifully formatted crop recommendation output."""
     print("\n" + "=" * 65)
-    print(f"  AGRISMART AI CROP RECOMMENDATION ({result.get('model_version', 'v2.0.0')})")
+    print(f"  AGRINEXA AI CROP RECOMMENDATION ({result.get('model_version', 'v2.0.0')})")
     print("=" * 65)
     
     inputs = result.get("input_features", {})
@@ -46,7 +46,7 @@ def format_prediction_output(result: dict) -> None:
 
 def run_interactive():
     """Prompt user interactively for farmer-friendly parameters."""
-    print("\n=== AgriSmart AI Model v2: Interactive Crop Recommendation ===")
+    print("\n=== AgriNexa AI Model v2: Interactive Crop Recommendation ===")
     print(f"Available soil categories: {', '.join([s.title() for s in ALLOWED_SOIL_TYPES if s != 'unknown'])}\n")
     
     try:
@@ -92,7 +92,7 @@ def run_interactive():
 
 def run_example(top_k: int = 5):
     """Run standard canonical example test on Model v2."""
-    print("\n--- Running AgriSmart Model v2 Example Prediction ---")
+    print("\n--- Running AgriNexa Model v2 Example Prediction ---")
     try:
         result = predict_crop(
             state="Gujarat",
@@ -111,7 +111,7 @@ def run_example(top_k: int = 5):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="CLI Test Interface for AgriSmart AI Crop Recommendation Model v2"
+        description="CLI Test Interface for AgriNexa AI Crop Recommendation Model v2"
     )
     parser.add_argument("-i", "--interactive", action="store_true", help="Run in interactive prompt mode")
     parser.add_argument("--state", type=str, default=None, help="State name (e.g. Gujarat)")

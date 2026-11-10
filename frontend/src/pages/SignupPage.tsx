@@ -60,7 +60,7 @@ export function SignupPage({ onBack, onNavigateLogin, onSuccess: _onSuccess }: S
             <Lock size={22} strokeWidth={2.2} />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-            Create an AgriSmart AI Account
+            Create an AgriNexa AI Account
           </h1>
           <p className="mt-1 text-xs sm:text-sm text-slate-500">
             Authentication is optional. All diagnostic and advisory tools remain fully open.

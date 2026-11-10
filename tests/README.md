@@ -1,4 +1,4 @@
-# AgriSmart AI Test Suites
+# AgriNexa AI Test Suites
 
 This directory contains automated test suites for the system.
 
